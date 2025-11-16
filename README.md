@@ -6,6 +6,14 @@
 
 ---
 
+## 📸 Screenshot
+
+> Example of the extension in action:
+
+![Screenshot](./Screenshot-google.png)
+
+---
+
 ## 🚀 Overview
 
 **Elegant ChatGPT Navigation** adds a persistent, auto-updating navigation panel to the ChatGPT interface.
