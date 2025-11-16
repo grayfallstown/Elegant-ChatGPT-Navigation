@@ -70,7 +70,7 @@ Includes a PayPal donation button:
 
 ### Firefox
 
-(Firefox Store)]https://addons.mozilla.org/de/firefox/addon/elegant-chatgpt-navigation/]
+[Firefox Store](https://addons.mozilla.org/de/firefox/addon/elegant-chatgpt-navigation/)
 ---
 
 
