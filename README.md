@@ -58,12 +58,6 @@ Perfect for developers, researchers, and heavy ChatGPT users.
 * **No external communication**
 * Everything runs **locally in your browser**
 
-### ❤️ Optional Support Button
-
-Includes a PayPal donation button:
-
-> [https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ](https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ)
-
 ---
 
 ## 📦 Installation
