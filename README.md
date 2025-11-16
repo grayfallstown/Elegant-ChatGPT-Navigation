@@ -68,19 +68,9 @@ Includes a PayPal donation button:
 
 ## 📦 Installation
 
-### Firefox (recommended)
+### Firefox
 
-1. Download or build the add-on.
-2. Navigate to:
-
-   ```
-   about:debugging#/runtime/this-firefox
-   ```
-3. Click **“Load Temporary Add-on”**.
-4. Select the `manifest.json`.
-
-(AMO store version coming soon.)
-
+(Firefox Store)]https://addons.mozilla.org/de/firefox/addon/elegant-chatgpt-navigation/]
 ---
 
 
