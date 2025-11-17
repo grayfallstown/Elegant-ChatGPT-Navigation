@@ -9,16 +9,13 @@
       content="Elegant ChatGPT Navigation adds a powerful side navigation panel to the ChatGPT web UI – jump to any prompt, response, heading or code block with a single click."
     />
 
-    <!-- Open Graph / Social Preview -->
+    <!-- Open Graph -->
     <meta property="og:title" content="Elegant ChatGPT Navigation" />
     <meta
       property="og:description"
       content="Side navigation for the ChatGPT web UI: prompts, responses, headings and code blocks as a clickable tree."
     />
-    <meta
-      property="og:image"
-      content="https://grayfallstown.github.io/Elegant-ChatGPT-Navigation/screenshot_crop.png"
-    />
+    <meta property="og:image" content="./screenshot_crop.png" />
     <meta property="og:type" content="website" />
 
     <style>
@@ -35,13 +32,9 @@
         --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.5);
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+        font-family: system-ui, sans-serif;
         background: radial-gradient(circle at top, #14172a, #050712 55%);
         color: var(--text);
         -webkit-font-smoothing: antialiased;
@@ -50,12 +43,6 @@
       a {
         color: inherit;
         text-decoration: none;
-      }
-
-      .page {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
       }
 
       .container {
@@ -67,589 +54,287 @@
 
       header {
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        padding-bottom: 8px;
+        align-items: center;
       }
 
       .brand {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
       }
 
       .brand-logo {
-        width: 32px;
-        height: 32px;
-        border-radius: 10px;
-        background: #050712;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
         border: 1px solid var(--border-soft);
+        overflow: hidden;
       }
 
       .brand-logo img {
         width: 100%;
         height: 100%;
-        display: block;
-      }
-
-      .brand-text-main {
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        font-size: 16px;
-      }
-
-      .brand-text-sub {
-        font-size: 12px;
-        color: var(--muted);
       }
 
       .top-actions {
         display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
+        gap: 10px;
       }
 
-      .gh-link {
-        font-size: 13px;
-        padding: 6px 10px;
+      .gh-link,
+      .donate-link-top {
+        padding: 6px 12px;
         border-radius: 999px;
+        font-size: 13px;
         border: 1px solid var(--border-soft);
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(8, 10, 24, 0.8);
-      }
-
-      .gh-link span {
-        opacity: 0.85;
       }
 
       .donate-link-top {
-        font-size: 12px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(255, 214, 100, 0.6);
         background: radial-gradient(circle at top left, #403116, #15100a);
+        border-color: rgba(255, 214, 100, 0.6);
         color: #ffe9a4;
-      }
-
-      main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-        padding-top: 8px;
       }
 
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
-        gap: 32px;
-        align-items: center;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        margin-top: 32px;
       }
 
       @media (max-width: 860px) {
         .hero {
-          grid-template-columns: minmax(0, 1fr);
+          grid-template-columns: 1fr;
         }
       }
 
-      .hero-kicker {
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        color: var(--muted);
-        margin-bottom: 10px;
-      }
-
       .hero-title {
-        font-size: clamp(30px, 4vw, 40px);
-        line-height: 1.15;
-        margin: 0 0 14px;
-      }
-
-      .hero-highlight {
-        background: linear-gradient(90deg, #4f8cff, #4bd1ff);
-        -webkit-background-clip: text;
-        color: transparent;
+        font-size: clamp(28px, 4vw, 40px);
+        margin-bottom: 14px;
       }
 
       .hero-subtitle {
         font-size: 15px;
-        line-height: 1.6;
         color: var(--muted);
         max-width: 480px;
-        margin-bottom: 20px;
+        line-height: 1.6;
       }
 
       .hero-badges {
+        margin: 18px 0;
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        margin-bottom: 20px;
       }
 
       .hero-badge {
+        padding: 4px 10px;
         font-size: 11px;
-        padding: 4px 9px;
-        border-radius: 999px;
         border: 1px solid var(--border-soft);
-        background: rgba(9, 12, 30, 0.8);
+        border-radius: 999px;
+        background: rgba(12, 14, 26, 0.8);
         color: var(--muted);
-      }
-
-      .hero-badge strong {
-        color: var(--text);
-        font-weight: 500;
-      }
-
-      .store-label {
-        font-size: 11px;
-        color: var(--muted);
-        margin-bottom: 10px;
       }
 
       .store-buttons {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
-        margin-bottom: 14px;
+        margin-top: 16px;
       }
 
       .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 9px 16px;
         border-radius: 999px;
+        padding: 9px 16px;
         font-size: 14px;
-        line-height: 1;
-        border: 1px solid transparent;
-        cursor: pointer;
-        transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.12s ease-out,
-          border-color 0.12s ease-out;
-        text-decoration: none;
-        white-space: nowrap;
+        border: 1px solid var(--border-soft);
       }
 
       .btn-primary {
         background: linear-gradient(120deg, #4f8cff, #4bd1ff);
         color: #050712;
-        box-shadow: 0 14px 30px rgba(26, 82, 255, 0.45);
-      }
-
-      .btn-outline {
-        background: transparent;
-        color: var(--text);
-        border-color: var(--border-soft);
-      }
-
-      .btn-small {
-        font-size: 13px;
-        padding: 7px 12px;
-      }
-
-      .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-      }
-
-      .btn:active {
-        transform: translateY(0);
-        box-shadow: none;
-      }
-
-      .hero-note {
-        font-size: 11px;
-        color: var(--muted);
-      }
-
-      .hero-note a {
-        text-decoration: underline;
-      }
-
-      .hero-visual {
-        background: radial-gradient(circle at top left, #283459, #101222);
-        border-radius: var(--radius-lg);
-        padding: 16px 16px 18px;
-        box-shadow: var(--shadow-soft);
-        border: 1px solid var(--border-soft);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .hero-tag {
-        position: absolute;
-        top: 14px;
-        left: 16px;
-        font-size: 11px;
-        padding: 4px 9px;
-        border-radius: 999px;
-        background: var(--accent-soft);
-        border: 1px solid rgba(79, 140, 255, 0.5);
-        color: #d4e1ff;
       }
 
       .hero-screenshot {
-        margin-top: 30px;
         border-radius: 18px;
         overflow: hidden;
-        border: 1px solid #26293a;
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+        border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-soft);
         background: #000;
       }
 
       .hero-screenshot img {
-        display: block;
         width: 100%;
-        height: auto;
-      }
-
-      .section {
-        margin-top: 18px;
+        display: block;
       }
 
       .section-title {
-        font-size: 18px;
-        margin-bottom: 10px;
+        margin-top: 60px;
+        margin-bottom: 16px;
+        font-size: 20px;
       }
 
       .features-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(3, 1fr);
         gap: 14px;
       }
 
-      @media (max-width: 860px) {
+      @media (max-width: 700px) {
         .features-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      @media (max-width: 600px) {
-        .features-grid {
-          grid-template-columns: minmax(0, 1fr);
+          grid-template-columns: 1fr;
         }
       }
 
       .feature-card {
-        border-radius: var(--radius-md);
-        padding: 10px 11px;
+        background: rgba(8, 10, 24, 0.9);
+        padding: 12px;
+        border-radius: 12px;
         border: 1px solid var(--border-soft);
-        background: rgba(7, 10, 25, 0.9);
       }
 
-      .feature-title {
-        font-size: 13px;
-        margin-bottom: 4px;
+      .feature-card .feature-title {
+        font-size: 14px;
+        margin-bottom: 6px;
       }
 
-      .feature-text {
+      .feature-card .feature-text {
         font-size: 12px;
         color: var(--muted);
-        line-height: 1.5;
-      }
-
-      .emoji-tag {
-        font-size: 16px;
-        margin-right: 3px;
-      }
-
-      .demo-section {
-        margin-top: 22px;
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-        gap: 24px;
-        align-items: flex-start;
-      }
-
-      @media (max-width: 900px) {
-        .demo-section {
-          grid-template-columns: minmax(0, 1fr);
-        }
-      }
-
-      .video-card {
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border-soft);
-        background: var(--bg-alt);
-        padding: 14px;
-        box-shadow: var(--shadow-soft);
-      }
-
-      .video-wrapper {
-        border-radius: 12px;
-        overflow: hidden;
-        background: #000;
-        position: relative;
-      }
-
-      .video-wrapper img {
-        display: block;
-        width: 100%;
-        height: auto;
-      }
-
-      .video-caption {
-        font-size: 11px;
-        color: var(--muted);
-        margin-top: 6px;
-      }
-
-      .demo-text {
-        font-size: 13px;
-        color: var(--muted);
-        line-height: 1.7;
-      }
-
-      .demo-text strong {
-        color: var(--text);
       }
 
       footer {
-        margin-top: 32px;
         border-top: 1px solid var(--border-soft);
-        padding-top: 14px;
-        font-size: 11px;
+        margin-top: 50px;
+        padding-top: 20px;
+        font-size: 12px;
         color: var(--muted);
         display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
         justify-content: space-between;
       }
 
-      .footer-links {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .footer-links a {
+      footer a {
         text-decoration: underline;
-        text-underline-offset: 2px;
       }
     </style>
   </head>
+
   <body>
-    <div class="page">
-      <div class="container">
-        <header>
-          <div class="brand">
-            <div class="brand-logo">
-              <!-- Logo from ./icon/logo.svg -->
-              <img src="./icon/logo.svg" alt="Elegant ChatGPT Navigation logo" />
-            </div>
-            <div>
-              <div class="brand-text-main">Elegant ChatGPT Navigation</div>
-              <div class="brand-text-sub">Side navigation panel for the ChatGPT web UI</div>
-            </div>
-          </div>
-          <div class="top-actions">
-            <a
-              class="gh-link"
-              href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>GitHub</span>
-              <span>↗</span>
-            </a>
-            <a
-              class="donate-link-top"
-              href="https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Support via PayPal
-            </a>
-          </div>
-        </header>
-
-        <main>
-          <!-- HERO -->
-          <section class="hero">
-            <div>
-              <div class="hero-kicker">Browser Extension · Open Source</div>
-              <h1 class="hero-title">
-                Turn ChatGPT into a <span class="hero-highlight">clickable conversation tree</span>.
-              </h1>
-              <p class="hero-subtitle">
-                Elegant ChatGPT Navigation adds a right-hand side panel that lists prompts, responses, headings and code
-                blocks as a tree. Stop scrolling forever – jump anywhere with a single click in the ChatGPT web UI.
-              </p>
-
-              <div class="hero-badges">
-                <div class="hero-badge"><strong>Free</strong> &amp; open source</div>
-                <div class="hero-badge">No tracking, no analytics</div>
-                <div class="hero-badge">Works with the ChatGPT web UI</div>
-              </div>
-
-              <div class="store-label">Install from your browser&apos;s extension store:</div>
-
-              <div class="store-buttons">
-                <!-- Firefox -->
-                <a
-                  class="btn btn-primary"
-                  href="https://addons.mozilla.org/de/firefox/addon/elegant-chatgpt-navigation/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Add to Firefox</span>
-                </a>
-
-                <!-- Microsoft Edge -->
-                <a
-                  class="btn btn-outline"
-                  href="https://microsoftedge.microsoft.com/addons/detail/elegant-chatgpt-navigatio/fekjldpkkbenegeapfccdkldfmdgafhg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Add to Microsoft Edge</span>
-                </a>
-
-                <!-- Chrome / Chromium note (source for now, store link can be added later) -->
-                <a
-                  class="btn btn-outline btn-small"
-                  href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Chrome / Brave – from source</span>
-                </a>
-              </div>
-
-              <div class="hero-note">
-                Source code and installation instructions:
-                <a
-                  href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/</a
-                >
-              </div>
-            </div>
-
-            <!-- HERO SCREENSHOT -->
-            <div class="hero-visual">
-              <div class="hero-tag">Screenshot from the ChatGPT web UI</div>
-              <div class="hero-screenshot">
-                <img
-                  src="./Screenshot-google.png"
-                  alt="Screenshot of Elegant ChatGPT Navigation in the ChatGPT web UI"
-                />
-              </div>
-            </div>
-          </section>
-
-          <!-- FEATURES + DEMO -->
-          <section class="section">
-            <h2 class="section-title">Why use Elegant ChatGPT Navigation?</h2>
-            <div class="features-grid">
-              <div class="feature-card">
-                <div class="feature-title">
-                  <span class="emoji-tag">🧭</span>Jump anywhere instantly
-                </div>
-                <div class="feature-text">
-                  Click on prompts, responses, headings or code blocks in the side panel to scroll the conversation
-                  there immediately.
-                </div>
-              </div>
-              <div class="feature-card">
-                <div class="feature-title">
-                  <span class="emoji-tag">🌳</span>Tree view of long chats
-                </div>
-                <div class="feature-text">
-                  Long conversations become a structured outline instead of endless scrolling. Perfect for tutorials,
-                  debugging and note-taking.
-                </div>
-              </div>
-              <div class="feature-card">
-                <div class="feature-title">
-                  <span class="emoji-tag">⚙️</span>Zero configuration
-                </div>
-                <div class="feature-text">
-                  Install the extension, open the ChatGPT web UI and the navigation panel appears on the right side automatically.
-                </div>
-              </div>
-              <div class="feature-card">
-                <div class="feature-title">
-                  <span class="emoji-tag">🛡️</span>No tracking, no analytics
-                </div>
-                <div class="feature-text">
-                  Fully open source. No telemetry, no user tracking, no external calls beyond what the ChatGPT web UI itself uses.
-                </div>
-              </div>
-              <div class="feature-card">
-                <div class="feature-title">
-                  <span class="emoji-tag">🧑‍💻</span>Built for developers &amp; power users
-                </div>
-                <div class="feature-text">
-                  Quickly jump between headings and code blocks when iterating on prompts, documentation or examples.
-                </div>
-              </div>
-              <div class="feature-card">
-                <div class="feature-title">
-                  <span class="emoji-tag">🧩</span>Open source &amp; hackable
-                </div>
-                <div class="feature-text">
-                  Hosted on GitHub. Fork it, tweak the UI, or integrate it into your personal productivity setup.
-                </div>
-              </div>
-            </div>
-
-            <div class="demo-section">
-              <div class="video-card">
-                <h3 class="section-title">Screenshot from the ChatGPT web UI</h3>
-                <div class="video-wrapper">
-                  <img
-                    src="./Screenshot-google.png"
-                    alt="Screenshot of Elegant ChatGPT Navigation in the ChatGPT web UI"
-                  />
-                </div>
-                <div class="video-caption">
-                  Static screenshot captured in the ChatGPT web UI with Elegant ChatGPT Navigation enabled on the
-                  right-hand side.
-                </div>
-              </div>
-
-              <div class="demo-text">
-                <p>
-                  This screenshot shows a real ChatGPT conversation in the browser with the navigation panel open on the
-                  right side. Prompts, responses, headings and code blocks are listed as a clickable tree, making it
-                  easy to jump around in long chats without endless scrolling.
-                </p>
-              </div>
-            </div>
-          </section>
-        </main>
-
-        <footer>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="brand-logo"><img src="./icon/logo.svg" alt="Logo" /></div>
           <div>
-            © <span id="year"></span> Elegant ChatGPT Navigation · MIT License · Open source
+            <strong>Elegant ChatGPT Navigation</strong><br />
+            <span style="font-size:12px;color:var(--muted)">Side navigation panel for the ChatGPT web UI</span>
           </div>
-          <div class="footer-links">
+        </div>
+
+        <div class="top-actions">
+          <a class="gh-link" href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation" target="_blank"
+            >GitHub ↗</a
+          >
+          <a
+            class="donate-link-top"
+            href="https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ"
+            target="_blank"
+            >Donate</a
+          >
+        </div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h1 class="hero-title">Turn ChatGPT into a clickable conversation tree.</h1>
+
+          <p class="hero-subtitle">
+            Elegant ChatGPT Navigation adds a right-hand panel that lists prompts, responses, headings and code blocks
+            as a clean, clickable tree. Perfect for long conversations on the ChatGPT web UI.
+          </p>
+
+          <div class="hero-badges">
+            <div class="hero-badge"><strong>Free</strong> & open source</div>
+            <div class="hero-badge">No tracking</div>
+            <div class="hero-badge">Works with ChatGPT web UI</div>
+          </div>
+
+          <div class="store-buttons">
             <a
-              href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
+              class="btn btn-primary"
+              href="https://addons.mozilla.org/de/firefox/addon/elegant-chatgpt-navigation/"
               target="_blank"
-              rel="noopener noreferrer"
-              >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/</a
+              >Add to Firefox</a
             >
+
             <a
-              href="https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ"
+              class="btn"
+              href="https://microsoftedge.microsoft.com/addons/detail/elegant-chatgpt-navigatio/fekjldpkkbenegeapfccdkldfmdgafhg"
               target="_blank"
-              rel="noopener noreferrer"
-              >https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ</a
+              >Add to Microsoft Edge</a
+            >
+
+            <a class="btn" href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation" target="_blank"
+              >Chrome / Brave – from source</a
             >
           </div>
-        </footer>
+        </div>
+
+        <div class="hero-screenshot">
+          <img src="./screenshot_crop.png" alt="Screenshot of the extension" />
+        </div>
+      </section>
+
+      <h2 class="section-title">Why use Elegant ChatGPT Navigation?</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-title">🧭 Jump anywhere instantly</div>
+          <div class="feature-text">
+            Click on prompts, responses, headings or code blocks to scroll the ChatGPT web UI instantly.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title">🌳 Clear tree structure</div>
+          <div class="feature-text">Long conversations become a structured outline instead of endless scrolling.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title">⚙️ Zero setup</div>
+          <div class="feature-text">Install it and the panel appears automatically on the ChatGPT web UI.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title">🛡️ Privacy-first</div>
+          <div class="feature-text">Fully local. No tracking, no external calls, no data collection.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title">🧑‍💻 Developer-friendly</div>
+          <div class="feature-text">Jump between headings and code blocks lightning fast.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title">🧩 Open source</div>
+          <div class="feature-text">Fork it, mod it, integrate it into your workflow.</div>
+        </div>
       </div>
+
+      <footer>
+        <div>© <span id="year"></span> Elegant ChatGPT Navigation – MIT License</div>
+        <div>
+          <a href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation" target="_blank"
+            >GitHub</a
+          >
+          &nbsp;·&nbsp;
+          <a
+            href="https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ"
+            target="_blank"
+            >Donate</a
+          >
+        </div>
+      </footer>
     </div>
 
     <script>
