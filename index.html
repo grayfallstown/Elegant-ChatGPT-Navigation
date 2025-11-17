@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elegant ChatGPT Navigation – Side Panel Navigator for ChatGPT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Elegant ChatGPT Navigation adds a powerful side navigation panel to ChatGPT – jump to any prompt, response, heading or code block in one click."
+    />
+
+    <!-- Open Graph / Social Preview -->
+    <meta property="og:title" content="Elegant ChatGPT Navigation" />
+    <meta
+      property="og:description"
+      content="Side navigation for ChatGPT: jump to prompts, responses, headings and code blocks with one click."
+    />
+    <!-- Optional: set to your icon or promo image -->
+    <meta property="og:image" content="https://your-domain-or-github.io/path/to/social-image.png" />
+    <meta property="og:type" content="website" />
+
+    <style>
+      :root {
+        --bg: #050712;
+        --bg-alt: #0f111a;
+        --accent: #4f8cff;
+        --accent-soft: rgba(79, 140, 255, 0.15);
+        --text: #f7f7ff;
+        --muted: #a7acc7;
+        --border-soft: #26293a;
+        --radius-lg: 16px;
+        --radius-md: 10px;
+        --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top, #14172a, #050712 55%);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px 20px 40px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 8px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: conic-gradient(from 210deg, #4f8cff, #4bd1ff, #8b5bff, #4f8cff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .brand-text-main {
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        font-size: 16px;
+      }
+
+      .brand-text-sub {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .gh-link {
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border-soft);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(8, 10, 24, 0.8);
+      }
+
+      .gh-link span {
+        opacity: 0.8;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        padding-top: 8px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+        gap: 32px;
+        align-items: center;
+      }
+
+      @media (max-width: 860px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .hero-kicker {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .hero-title {
+        font-size: clamp(30px, 4vw, 40px);
+        line-height: 1.15;
+        margin: 0 0 14px;
+      }
+
+      .hero-highlight {
+        background: linear-gradient(90deg, #4f8cff, #4bd1ff);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .hero-subtitle {
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--muted);
+        max-width: 480px;
+        margin-bottom: 20px;
+      }
+
+      .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .hero-badge {
+        font-size: 11px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--border-soft);
+        background: rgba(9, 12, 30, 0.8);
+        color: var(--muted);
+      }
+
+      .hero-badge strong {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .store-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 9px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        line-height: 1;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.12s ease-out,
+          border-color 0.12s ease-out;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: linear-gradient(120deg, #4f8cff, #4bd1ff);
+        color: #050712;
+        box-shadow: 0 14px 30px rgba(26, 82, 255, 0.45);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--text);
+        border-color: var(--border-soft);
+      }
+
+      .btn-small {
+        font-size: 13px;
+        padding: 7px 12px;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+        box-shadow: none;
+      }
+
+      .store-label {
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 22px;
+      }
+
+      .hero-note {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .hero-note a {
+        text-decoration: underline;
+      }
+
+      .hero-visual {
+        background: radial-gradient(circle at top left, #283459, #101222);
+        border-radius: var(--radius-lg);
+        padding: 16px 16px 18px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--border-soft);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-tag {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        font-size: 11px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        border: 1px solid rgba(79, 140, 255, 0.5);
+        color: #d4e1ff;
+      }
+
+      .mockup-browser {
+        background: #050712;
+        border-radius: 12px;
+        border: 1px solid #26293a;
+        overflow: hidden;
+        font-size: 11px;
+      }
+
+      .mockup-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 10px;
+        background: #10131f;
+        border-bottom: 1px solid #25293c;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #363a51;
+      }
+
+      .dot.red {
+        background: #ff5f57;
+      }
+
+      .dot.yellow {
+        background: #febc2e;
+      }
+
+      .dot.green {
+        background: #28c840;
+      }
+
+      .mockup-url {
+        flex: 1;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #050712;
+        color: #7c8099;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .mockup-content {
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+        min-height: 230px;
+      }
+
+      @media (max-width: 640px) {
+        .mockup-content {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .mockup-chat {
+        padding: 10px 12px 12px;
+        border-right: 1px solid #202437;
+      }
+
+      .mockup-bubble {
+        border-radius: 10px;
+        padding: 7px 9px;
+        margin-bottom: 6px;
+        max-width: 100%;
+      }
+
+      .mockup-bubble.user {
+        background: #1b2134;
+      }
+
+      .mockup-bubble.ai {
+        background: #10131f;
+      }
+
+      .mockup-heading {
+        margin-top: 4px;
+        font-weight: 600;
+        font-size: 11px;
+      }
+
+      .mockup-code {
+        margin-top: 4px;
+        padding: 6px;
+        border-radius: 7px;
+        background: #050712;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 10px;
+        color: #d0d3ff;
+      }
+
+      .mockup-nav {
+        padding: 10px 10px 10px;
+        background: #050712;
+      }
+
+      .mockup-nav-title {
+        font-size: 11px;
+        margin-bottom: 6px;
+        color: #d4dcff;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .mockup-nav-tree {
+        border-radius: 8px;
+        background: linear-gradient(180deg, #0c1020, #050712);
+        padding: 7px;
+        border: 1px solid #262a3d;
+        font-size: 11px;
+      }
+
+      .mockup-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 4px;
+        border-radius: 6px;
+        margin-bottom: 2px;
+        color: #aeb4da;
+      }
+
+      .mockup-nav-item.active {
+        background: linear-gradient(120deg, rgba(79, 140, 255, 0.25), rgba(75, 209, 255, 0.25));
+        color: #fdfdff;
+      }
+
+      .mockup-nav-item span.icon {
+        font-size: 12px;
+      }
+
+      .mockup-nav-item span.label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .mockup-nav-children {
+        padding-left: 16px;
+      }
+
+      .section {
+        margin-top: 12px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      @media (max-width: 860px) {
+        .features-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 600px) {
+        .features-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .feature-card {
+        border-radius: var(--radius-md);
+        padding: 10px 11px;
+        border: 1px solid var(--border-soft);
+        background: rgba(7, 10, 25, 0.9);
+      }
+
+      .feature-title {
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+
+      .feature-text {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .emoji-tag {
+        font-size: 16px;
+        margin-right: 3px;
+      }
+
+      .demo-section {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 24px;
+        align-items: flex-start;
+      }
+
+      @media (max-width: 900px) {
+        .demo-section {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .video-card {
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-soft);
+        background: var(--bg-alt);
+        padding: 14px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .video-wrapper {
+        border-radius: 12px;
+        overflow: hidden;
+        background: #000;
+        position: relative;
+      }
+
+      .video-wrapper video {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .video-caption {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .demo-text {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .demo-text strong {
+        color: var(--text);
+      }
+
+      footer {
+        margin-top: 32px;
+        border-top: 1px solid var(--border-soft);
+        padding-top: 14px;
+        font-size: 11px;
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: space-between;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .footer-links a {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="container">
+        <header>
+          <div class="brand">
+            <div class="brand-logo">🌳</div>
+            <div>
+              <div class="brand-text-main">Elegant ChatGPT Navigation</div>
+              <div class="brand-text-sub">Side navigation panel for ChatGPT</div>
+            </div>
+          </div>
+          <a
+            class="gh-link"
+            href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>View on GitHub</span>
+            <span>↗</span>
+          </a>
+        </header>
+
+        <main>
+          <!-- HERO -->
+          <section class="hero">
+            <div>
+              <div class="hero-kicker">Browser Extension · Open Source</div>
+              <h1 class="hero-title">
+                Turn ChatGPT into a <span class="hero-highlight">clickable conversation tree</span>.
+              </h1>
+              <p class="hero-subtitle">
+                Elegant ChatGPT Navigation adds a right-hand side panel that lists all prompts, responses, headings and
+                code blocks as a tree. Stop scrolling forever – jump anywhere with a single click.
+              </p>
+
+              <div class="hero-badges">
+                <div class="hero-badge"><strong>Free</strong> &amp; open source</div>
+                <div class="hero-badge">No tracking, no analytics</div>
+                <div class="hero-badge">Works with the standard ChatGPT UI</div>
+              </div>
+
+              <div class="store-label">Install from your browser&apos;s extension store:</div>
+
+              <div class="store-buttons">
+                <!-- TODO: Replace the three href URLs with your real store links -->
+                <a
+                  class="btn btn-primary"
+                  href="https://chromewebstore.google.com/detail/YOUR-CHROME-ID"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Add to Chrome / Brave</span>
+                </a>
+
+                <a
+                  class="btn btn-outline"
+                  href="https://addons.mozilla.org/firefox/addon/YOUR-FIREFOX-SLUG/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Add to Firefox</span>
+                </a>
+
+                <a
+                  class="btn btn-outline btn-small"
+                  href="https://microsoftedge.microsoft.com/addons/detail/YOUR-EDGE-ID"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Add to Edge</span>
+                </a>
+              </div>
+
+              <div class="hero-note">
+                Don&apos;t see your browser? You can also install from source via GitHub:
+                <a
+                  href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation</a
+                >
+              </div>
+            </div>
+
+            <!-- VISUAL MOCKUP -->
+            <div class="hero-visual">
+              <div class="hero-tag">Live in the ChatGPT interface</div>
+              <div class="mockup-browser">
+                <div class="mockup-bar">
+                  <div class="dot red"></div>
+                  <div class="dot yellow"></div>
+                  <div class="dot green"></div>
+                  <div class="mockup-url">https://chatgpt.com/</div>
+                </div>
+                <div class="mockup-content">
+                  <div class="mockup-chat">
+                    <div class="mockup-bubble user">
+                      <strong>Prompt</strong><br />
+                      &quot;Explain how a binary search works.&quot;
+                    </div>
+                    <div class="mockup-bubble ai">
+                      <div class="mockup-heading">What is binary search?</div>
+                      <div class="mockup-code">
+                        function binarySearch(arr, target) {<br />
+                        &nbsp;&nbsp;// ...<br />
+                        }
+                      </div>
+                    </div>
+                    <div class="mockup-bubble ai">
+                      <div class="mockup-heading">Complexity</div>
+                      <div>Time complexity: O(log n)</div>
+                    </div>
+                  </div>
+                  <div class="mockup-nav">
+                    <div class="mockup-nav-title">
+                      <span>Navigation</span>
+                      <span>⋮</span>
+                    </div>
+                    <div class="mockup-nav-tree">
+                      <div class="mockup-nav-item active">
+                        <span class="icon">💬</span>
+                        <span class="label">Prompt · Binary search</span>
+                      </div>
+                      <div class="mockup-nav-item">
+                        <span class="icon">🤖</span>
+                        <span class="label">Response · Overview</span>
+                      </div>
+                      <div class="mockup-nav-children">
+                        <div class="mockup-nav-item">
+                          <span class="icon">H1</span>
+                          <span class="label">What is binary search?</span>
+                        </div>
+                        <div class="mockup-nav-item">
+                          <span class="icon">&lt;/&gt;</span>
+                          <span class="label">Code sample</span>
+                        </div>
+                        <div class="mockup-nav-item">
+                          <span class="icon">H2</span>
+                          <span class="label">Complexity</span>
+                        </div>
+                      </div>
+                      <div class="mockup-nav-item">
+                        <span class="icon">🤖</span>
+                        <span class="label">Response · Edge cases</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- FEATURES + DEMO -->
+          <section class="section">
+            <h2 class="section-title">Why use Elegant ChatGPT Navigation?</h2>
+            <div class="features-grid">
+              <div class="feature-card">
+                <div class="feature-title">
+                  <span class="emoji-tag">🧭</span>Jump anywhere instantly
+                </div>
+                <div class="feature-text">
+                  Click on prompts, responses, headings or code blocks in the side panel to scroll the conversation
+                  there immediately.
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-title">
+                  <span class="emoji-tag">🌳</span>Tree view of long chats
+                </div>
+                <div class="feature-text">
+                  Long conversations become a structured outline instead of endless scrolling. Perfect for tutorials,
+                  debugging and note-taking.
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-title">
+                  <span class="emoji-tag">⚙️</span>Zero configuration
+                </div>
+                <div class="feature-text">
+                  Install the extension, open ChatGPT and the navigation panel appears on the right side automatically.
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-title">
+                  <span class="emoji-tag">🛡️</span>No tracking, no analytics
+                </div>
+                <div class="feature-text">
+                  Fully open source. No telemetry, no user tracking, no external calls beyond what ChatGPT itself uses.
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-title">
+                  <span class="emoji-tag">🧑‍💻</span>Built for developers &amp; power users
+                </div>
+                <div class="feature-text">
+                  Quickly jump between headings and code blocks when iterating on prompts, documentation or examples.
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-title">
+                  <span class="emoji-tag">🧩</span>Open source &amp; hackable
+                </div>
+                <div class="feature-text">
+                  Hosted on GitHub. Fork it, tweak the UI, or integrate it into your personal productivity setup.
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-section">
+              <div class="video-card">
+                <h3 class="section-title">Watch the navigation in action</h3>
+                <div class="video-wrapper">
+                  <!-- 
+                    TODO:
+                    - Put your screencap video into this repository, e.g. at /assets/elegant-chatgpt-navigation-demo.webm
+                    - Update the src URLs below accordingly
+                  -->
+                  <video controls poster="assets/elegant-chatgpt-navigation-poster.png">
+                    <source
+                      src="assets/elegant-chatgpt-navigation-demo.webm"
+                      type="video/webm"
+                    />
+                    <source
+                      src="assets/elegant-chatgpt-navigation-demo.mp4"
+                      type="video/mp4"
+                    />
+                    Your browser does not support the video tag.
+                    <!-- Optional YouTube fallback: -->
+                    <!--
+                    You can watch the demo on YouTube:
+                    https://www.youtube.com/watch?v=YOUR_VIDEO_ID
+                    -->
+                  </video>
+                </div>
+                <div class="video-caption">
+                  Short demo: a real ChatGPT conversation with the side navigation panel open on the right, showing
+                  prompts, responses, headings and code blocks as a clickable tree.
+                </div>
+              </div>
+
+              <div class="demo-text">
+                <p>
+                  <strong>How to record this demo quickly:</strong><br />
+                  Open ChatGPT, start a longer conversation with headings and code blocks, then record your screen while
+                  opening and using the navigation panel. Keep it short (20–40 seconds) and focused on the &quot;aha&quot; moment:
+                  clicking an item in the tree and jumping straight there.
+                </p>
+                <p>
+                  Add the exported <code>.webm</code> or <code>.mp4</code> file to an <code>assets/</code> folder in this repository and
+                  adjust the <code>src</code> paths in the
+                  <code>&lt;video&gt;</code> tag above.
+                </p>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer>
+          <div>© <span id="year"></span> Elegant ChatGPT Navigation · Open source</div>
+          <div class="footer-links">
+            <a
+              href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation"
+              target="_blank"
+              rel="noopener noreferrer"
+              >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation</a
+            >
+            <!-- Optional: add a issues link or docs link here -->
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      // Simple year auto-fill
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
