@@ -15,7 +15,10 @@
       property="og:description"
       content="Side navigation for the ChatGPT web UI: prompts, responses, headings and code blocks as a clickable tree."
     />
-    <meta property="og:image" content="https://grayfallstown.github.io/Elegant-ChatGPT-Navigation/Screenshot-google.png" />
+    <meta
+      property="og:image"
+      content="https://grayfallstown.github.io/Elegant-ChatGPT-Navigation/Screenshot-google.png"
+    />
     <meta property="og:type" content="website" />
 
     <style>
@@ -285,7 +288,7 @@
       .hero-tag {
         position: absolute;
         top: 14px;
-        right: 16px;
+        left: 16px;
         font-size: 11px;
         padding: 4px 9px;
         border-radius: 999px;
@@ -294,149 +297,19 @@
         color: #d4e1ff;
       }
 
-      .mockup-browser {
-        background: #050712;
-        border-radius: 12px;
+      .hero-screenshot {
+        margin-top: 30px;
+        border-radius: 18px;
+        overflow: hidden;
         border: 1px solid #26293a;
-        overflow: hidden;
-        font-size: 11px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+        background: #000;
       }
 
-      .mockup-bar {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 7px 10px;
-        background: #10131f;
-        border-bottom: 1px solid #25293c;
-      }
-
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: #363a51;
-      }
-
-      .dot.red {
-        background: #ff5f57;
-      }
-
-      .dot.yellow {
-        background: #febc2e;
-      }
-
-      .dot.green {
-        background: #28c840;
-      }
-
-      .mockup-url {
-        flex: 1;
-        padding: 3px 8px;
-        border-radius: 999px;
-        background: #050712;
-        color: #7c8099;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .mockup-content {
-        display: grid;
-        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-        min-height: 230px;
-      }
-
-      @media (max-width: 640px) {
-        .mockup-content {
-          grid-template-columns: minmax(0, 1fr);
-        }
-      }
-
-      .mockup-chat {
-        padding: 10px 12px 12px;
-        border-right: 1px solid #202437;
-      }
-
-      .mockup-bubble {
-        border-radius: 10px;
-        padding: 7px 9px;
-        margin-bottom: 6px;
-        max-width: 100%;
-      }
-
-      .mockup-bubble.user {
-        background: #1b2134;
-      }
-
-      .mockup-bubble.ai {
-        background: #10131f;
-      }
-
-      .mockup-heading {
-        margin-top: 4px;
-        font-weight: 600;
-        font-size: 11px;
-      }
-
-      .mockup-code {
-        margin-top: 4px;
-        padding: 6px;
-        border-radius: 7px;
-        background: #050712;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        font-size: 10px;
-        color: #d0d3ff;
-      }
-
-      .mockup-nav {
-        padding: 10px 10px 10px;
-        background: #050712;
-      }
-
-      .mockup-nav-title {
-        font-size: 11px;
-        margin-bottom: 6px;
-        color: #d4dcff;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .mockup-nav-tree {
-        border-radius: 8px;
-        background: linear-gradient(180deg, #0c1020, #050712);
-        padding: 7px;
-        border: 1px solid #262a3d;
-        font-size: 11px;
-      }
-
-      .mockup-nav-item {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 3px 4px;
-        border-radius: 6px;
-        margin-bottom: 2px;
-        color: #aeb4da;
-      }
-
-      .mockup-nav-item.active {
-        background: linear-gradient(120deg, rgba(79, 140, 255, 0.25), rgba(75, 209, 255, 0.25));
-        color: #fdfdff;
-      }
-
-      .mockup-nav-item span.icon {
-        font-size: 12px;
-      }
-
-      .mockup-nav-item span.label {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .mockup-nav-children {
-        padding-left: 16px;
+      .hero-screenshot img {
+        display: block;
+        width: 100%;
+        height: auto;
       }
 
       .section {
@@ -663,70 +536,14 @@
               </div>
             </div>
 
-            <!-- VISUAL MOCKUP -->
+            <!-- HERO SCREENSHOT -->
             <div class="hero-visual">
               <div class="hero-tag">Screenshot from the ChatGPT web UI</div>
-              <div class="mockup-browser">
-                <div class="mockup-bar">
-                  <div class="dot red"></div>
-                  <div class="dot yellow"></div>
-                  <div class="dot green"></div>
-                  <div class="mockup-url">https://chatgpt.com/</div>
-                </div>
-                <div class="mockup-content">
-                  <div class="mockup-chat">
-                    <div class="mockup-bubble user">
-                      <strong>Prompt</strong><br />
-                      &quot;Explain how a binary search works.&quot;
-                    </div>
-                    <div class="mockup-bubble ai">
-                      <div class="mockup-heading">What is binary search?</div>
-                      <div class="mockup-code">
-                        function binarySearch(arr, target) {<br />
-                        &nbsp;&nbsp;// ...<br />
-                        }
-                      </div>
-                    </div>
-                    <div class="mockup-bubble ai">
-                      <div class="mockup-heading">Complexity</div>
-                      <div>Time complexity: O(log n)</div>
-                    </div>
-                  </div>
-                  <div class="mockup-nav">
-                    <div class="mockup-nav-title">
-                      <span>Navigation</span>
-                      <span>⋮</span>
-                    </div>
-                    <div class="mockup-nav-tree">
-                      <div class="mockup-nav-item active">
-                        <span class="icon">💬</span>
-                        <span class="label">Prompt · Binary search</span>
-                      </div>
-                      <div class="mockup-nav-item">
-                        <span class="icon">🤖</span>
-                        <span class="label">Response · Overview</span>
-                      </div>
-                      <div class="mockup-nav-children">
-                        <div class="mockup-nav-item">
-                          <span class="icon">H1</span>
-                          <span class="label">What is binary search?</span>
-                        </div>
-                        <div class="mockup-nav-item">
-                          <span class="icon">&lt;/&gt;</span>
-                          <span class="label">Code sample</span>
-                        </div>
-                        <div class="mockup-nav-item">
-                          <span class="icon">H2</span>
-                          <span class="label">Complexity</span>
-                        </div>
-                      </div>
-                      <div class="mockup-nav-item">
-                        <span class="icon">🤖</span>
-                        <span class="label">Response · Edge cases</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div class="hero-screenshot">
+                <img
+                  src="./Screenshot-google.png"
+                  alt="Screenshot of Elegant ChatGPT Navigation in the ChatGPT web UI"
+                />
               </div>
             </div>
           </section>
@@ -791,14 +608,14 @@
               <div class="video-card">
                 <h3 class="section-title">Screenshot from the ChatGPT web UI</h3>
                 <div class="video-wrapper">
-                  <!-- Static screenshot placeholder -->
                   <img
                     src="./Screenshot-google.png"
                     alt="Screenshot of Elegant ChatGPT Navigation in the ChatGPT web UI"
                   />
                 </div>
                 <div class="video-caption">
-                  Static screenshot captured in the ChatGPT web UI with Elegant ChatGPT Navigation enabled on the right-hand side.
+                  Static screenshot captured in the ChatGPT web UI with Elegant ChatGPT Navigation enabled on the
+                  right-hand side.
                 </div>
               </div>
 
