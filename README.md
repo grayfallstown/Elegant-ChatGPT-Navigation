@@ -65,7 +65,15 @@ Perfect for developers, researchers, and heavy ChatGPT users.
 ### Firefox
 
 [Firefox Store](https://addons.mozilla.org/de/firefox/addon/elegant-chatgpt-navigation/)
+
+### Microsoft Edge
+
+[Microsoft Store](https://microsoftedge.microsoft.com/addons/detail/elegant-chatgpt-navigatio/fekjldpkkbenegeapfccdkldfmdgafhg)
+
 ---
+
+
+
 
 
 ## ❤️ Support the Project
