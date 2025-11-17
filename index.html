@@ -6,17 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Elegant ChatGPT Navigation adds a powerful side navigation panel to ChatGPT – jump to any prompt, response, heading or code block in one click."
+      content="Elegant ChatGPT Navigation adds a powerful side navigation panel to ChatGPT – jump to any prompt, response, heading or code block with a single click."
     />
 
     <!-- Open Graph / Social Preview -->
     <meta property="og:title" content="Elegant ChatGPT Navigation" />
     <meta
       property="og:description"
-      content="Side navigation for ChatGPT: jump to prompts, responses, headings and code blocks with one click."
+      content="Side navigation for ChatGPT: prompts, responses, headings and code blocks as a clickable tree."
     />
-    <!-- Optional: set to your icon or promo image -->
-    <meta property="og:image" content="https://your-domain-or-github.io/path/to/social-image.png" />
+    <meta property="og:image" content="https://grayfallstown.github.io/Elegant-ChatGPT-Navigation/Screenshot-google.png" />
     <meta property="og:type" content="website" />
 
     <style>
@@ -81,11 +80,18 @@
         width: 32px;
         height: 32px;
         border-radius: 10px;
-        background: conic-gradient(from 210deg, #4f8cff, #4bd1ff, #8b5bff, #4f8cff);
+        background: #050712;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
+        overflow: hidden;
+        border: 1px solid var(--border-soft);
+      }
+
+      .brand-logo img {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
 
       .brand-text-main {
@@ -97,6 +103,13 @@
       .brand-text-sub {
         font-size: 12px;
         color: var(--muted);
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
       }
 
       .gh-link {
@@ -111,7 +124,16 @@
       }
 
       .gh-link span {
-        opacity: 0.8;
+        opacity: 0.85;
+      }
+
+      .donate-link-top {
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 214, 100, 0.6);
+        background: radial-gradient(circle at top left, #403116, #15100a);
+        color: #ffe9a4;
       }
 
       main {
@@ -184,6 +206,12 @@
         font-weight: 500;
       }
 
+      .store-label {
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
       .store-buttons {
         display: flex;
         flex-wrap: wrap;
@@ -233,12 +261,6 @@
       .btn:active {
         transform: translateY(0);
         box-shadow: none;
-      }
-
-      .store-label {
-        font-size: 11px;
-        color: var(--muted);
-        margin-bottom: 22px;
       }
 
       .hero-note {
@@ -418,7 +440,7 @@
       }
 
       .section {
-        margin-top: 12px;
+        margin-top: 18px;
       }
 
       .section-title {
@@ -496,7 +518,7 @@
         position: relative;
       }
 
-      .video-wrapper video {
+      .video-wrapper img {
         display: block;
         width: 100%;
         height: auto;
@@ -547,21 +569,34 @@
       <div class="container">
         <header>
           <div class="brand">
-            <div class="brand-logo">🌳</div>
+            <div class="brand-logo">
+              <!-- Logo from ./icon/logo.svg -->
+              <img src="./icon/logo.svg" alt="Elegant ChatGPT Navigation logo" />
+            </div>
             <div>
               <div class="brand-text-main">Elegant ChatGPT Navigation</div>
               <div class="brand-text-sub">Side navigation panel for ChatGPT</div>
             </div>
           </div>
-          <a
-            class="gh-link"
-            href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>View on GitHub</span>
-            <span>↗</span>
-          </a>
+          <div class="top-actions">
+            <a
+              class="gh-link"
+              href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>GitHub</span>
+              <span>↗</span>
+            </a>
+            <a
+              class="donate-link-top"
+              href="https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Support via PayPal
+            </a>
+          </div>
         </header>
 
         <main>
@@ -573,8 +608,8 @@
                 Turn ChatGPT into a <span class="hero-highlight">clickable conversation tree</span>.
               </h1>
               <p class="hero-subtitle">
-                Elegant ChatGPT Navigation adds a right-hand side panel that lists all prompts, responses, headings and
-                code blocks as a tree. Stop scrolling forever – jump anywhere with a single click.
+                Elegant ChatGPT Navigation adds a right-hand side panel that lists prompts, responses, headings and code
+                blocks as a tree. Stop scrolling forever – jump anywhere with a single click.
               </p>
 
               <div class="hero-badges">
@@ -586,42 +621,44 @@
               <div class="store-label">Install from your browser&apos;s extension store:</div>
 
               <div class="store-buttons">
-                <!-- TODO: Replace the three href URLs with your real store links -->
+                <!-- Firefox -->
                 <a
                   class="btn btn-primary"
-                  href="https://chromewebstore.google.com/detail/YOUR-CHROME-ID"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Add to Chrome / Brave</span>
-                </a>
-
-                <a
-                  class="btn btn-outline"
-                  href="https://addons.mozilla.org/firefox/addon/YOUR-FIREFOX-SLUG/"
+                  href="https://addons.mozilla.org/de/firefox/addon/elegant-chatgpt-navigation/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <span>Add to Firefox</span>
                 </a>
 
+                <!-- Microsoft Edge -->
                 <a
-                  class="btn btn-outline btn-small"
-                  href="https://microsoftedge.microsoft.com/addons/detail/YOUR-EDGE-ID"
+                  class="btn btn-outline"
+                  href="https://microsoftedge.microsoft.com/addons/detail/elegant-chatgpt-navigatio/fekjldpkkbenegeapfccdkldfmdgafhg"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span>Add to Edge</span>
+                  <span>Add to Microsoft Edge</span>
+                </a>
+
+                <!-- Chrome / Chromium note (source for now, store link can be added later) -->
+                <a
+                  class="btn btn-outline btn-small"
+                  href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Chrome / Brave – from source</span>
                 </a>
               </div>
 
               <div class="hero-note">
-                Don&apos;t see your browser? You can also install from source via GitHub:
+                Source code and installation instructions:
                 <a
-                  href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation"
+                  href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation</a
+                  >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/</a
                 >
               </div>
             </div>
@@ -752,47 +789,33 @@
 
             <div class="demo-section">
               <div class="video-card">
-                <h3 class="section-title">Watch the navigation in action</h3>
+                <h3 class="section-title">Screenshot / demo placeholder</h3>
                 <div class="video-wrapper">
-                  <!-- 
-                    TODO:
-                    - Put your screencap video into this repository, e.g. at /assets/elegant-chatgpt-navigation-demo.webm
-                    - Update the src URLs below accordingly
+                  <!-- For now: static screenshot as placeholder for the future video -->
+                  <img
+                    src="./Screenshot-google.png"
+                    alt="Screenshot of Elegant ChatGPT Navigation in the ChatGPT interface"
+                  />
+                  <!--
+                  Later you can replace this <img> block with a <video> tag using a real screencap demo.
                   -->
-                  <video controls poster="assets/elegant-chatgpt-navigation-poster.png">
-                    <source
-                      src="assets/elegant-chatgpt-navigation-demo.webm"
-                      type="video/webm"
-                    />
-                    <source
-                      src="assets/elegant-chatgpt-navigation-demo.mp4"
-                      type="video/mp4"
-                    />
-                    Your browser does not support the video tag.
-                    <!-- Optional YouTube fallback: -->
-                    <!--
-                    You can watch the demo on YouTube:
-                    https://www.youtube.com/watch?v=YOUR_VIDEO_ID
-                    -->
-                  </video>
                 </div>
                 <div class="video-caption">
-                  Short demo: a real ChatGPT conversation with the side navigation panel open on the right, showing
-                  prompts, responses, headings and code blocks as a clickable tree.
+                  Current placeholder: static screenshot from Google Chrome with Elegant ChatGPT Navigation enabled.
+                  Replace this with a short screencast later.
                 </div>
               </div>
 
               <div class="demo-text">
                 <p>
-                  <strong>How to record this demo quickly:</strong><br />
-                  Open ChatGPT, start a longer conversation with headings and code blocks, then record your screen while
-                  opening and using the navigation panel. Keep it short (20–40 seconds) and focused on the &quot;aha&quot; moment:
-                  clicking an item in the tree and jumping straight there.
+                  <strong>Next step:</strong><br />
+                  Record a short screencast (20–40 seconds) where you open ChatGPT, show a long conversation and use the
+                  navigation panel to jump between headings and code blocks. Export it as <code>.webm</code> or
+                  <code>.mp4</code> and replace the screenshot above with a <code>&lt;video&gt;</code> tag.
                 </p>
                 <p>
-                  Add the exported <code>.webm</code> or <code>.mp4</code> file to an <code>assets/</code> folder in this repository and
-                  adjust the <code>src</code> paths in the
-                  <code>&lt;video&gt;</code> tag above.
+                  You can keep <code>./Screenshot-google.png</code> as the poster or fallback image and store the video
+                  files in an <code>assets/</code> folder inside this repository.
                 </p>
               </div>
             </div>
@@ -800,22 +823,28 @@
         </main>
 
         <footer>
-          <div>© <span id="year"></span> Elegant ChatGPT Navigation · Open source</div>
+          <div>
+            © <span id="year"></span> Elegant ChatGPT Navigation · MIT License · Open source
+          </div>
           <div class="footer-links">
             <a
-              href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation"
+              href="https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/"
               target="_blank"
               rel="noopener noreferrer"
-              >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation</a
+              >https://github.com/grayfallstown/Elegant-ChatGPT-Navigation/</a
             >
-            <!-- Optional: add a issues link or docs link here -->
+            <a
+              href="https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ"
+              target="_blank"
+              rel="noopener noreferrer"
+              >https://www.paypal.com/donate/?hosted_button_id=HDW4PAEKX7VUJ</a
+            >
           </div>
         </footer>
       </div>
     </div>
 
     <script>
-      // Simple year auto-fill
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
   </body>
