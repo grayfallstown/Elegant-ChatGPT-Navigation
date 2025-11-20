@@ -58,6 +58,18 @@ Perfect for developers, researchers, and heavy ChatGPT users.
 * **No external communication**
 * Everything runs **locally in your browser**
 
+## 📅 Planned Features
+
+* Jump to end of scroll target
+* Scroll History (jump back and forth quickly)
+* Marking / Highlighting scroll targets with different colors
+* Marking / Highlighting of scroll target highlights chat section as well
+* Jump to POIs within code blocks (functions, classes)
+* Bookmarkings
+* Keyboard Shortcuts
+* Sync between devices
+* Ability to optionaly include sub-headlines or paragraphs in navigation
+
 ---
 
 ## 📦 Installation
