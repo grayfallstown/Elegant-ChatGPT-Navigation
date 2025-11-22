@@ -1,0 +1,14 @@
+{
+  "name": "elegant-chatgpt-navigation-v9",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Consolidated v9 with all features unified and bugs fixed",
+  "scripts": {
+    "build": "esbuild src/content.js --bundle --format=iife --minify --outfile=dist/content.bundle.js",
+    "build:dev": "esbuild src/content.js --bundle --format=iife --sourcemap --outfile=dist/content.bundle.js",
+    "watch": "esbuild src/content.js --bundle --format=iife --sourcemap --watch --outfile=dist/content.bundle.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

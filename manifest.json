@@ -1,35 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "Elegant ChatGPT Navigation",
-  "description": "Elegant ChatGPT Navigation",
-  "version": "1.0.0",
-  "author": "grayfallstown",
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "elegant_chatgpt_navigation@grayfallstown.de",
-      "data_collection_permissions": {
-        "required": ["none"]
-      }
-    }
-  },
-  "icons": {
-    "128": "icon/logo.png"
-  },
+  "name": "Elegant ChatGPT Navigation v9",
+  "version": "2.0.0",
+  "description": "Consolidated navigation panel with all features unified",
   "permissions": [],
   "host_permissions": [
-    "https://chatgpt.com/*",
-    "https://chat.openai.com/*"
+    "https://chatgpt.com/*"
   ],
   "content_scripts": [
     {
-      "matches": [
-        "https://chatgpt.com/*",
-        "https://chat.openai.com/*"
-      ],
-      "js": [
-        "content.js"
-      ],
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["dist/content.bundle.js"],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "icons": {
+    "128": "icons/logo.png"
+  }
 }
