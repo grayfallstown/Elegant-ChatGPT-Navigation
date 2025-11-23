@@ -13,7 +13,8 @@ const log = createLogger("model");
  * @property {Element} anchorElement
  * @property {string|null} parentId
  * @property {number} depth
- * @property {boolean} marked
+ * @property {boolean} marked    // ⭐ Bookmark
+ * @property {string|null} markColor // 🎨 Farbmarkierung (logischer Name)
  */
 
 function shortText(text, maxLen = 80) {
@@ -46,9 +47,13 @@ function extractCodeLabel(preOrCode) {
 
 /**
  * Build POIs from message descriptors with consolidated logic
+ * @param {Array<{id:string,index:number,role:string,element:Element}>} messages
+ * @returns {PoiNode[]}
  */
 export function buildPoisFromMessages(messages) {
-  const span = log.startSpan("buildPoisFromMessages", { messageCount: messages.length });
+  const span = log.startSpan("buildPoisFromMessages", {
+    messageCount: messages.length
+  });
   /** @type {PoiNode[]} */
   const result = [];
 
@@ -68,7 +73,9 @@ export function buildPoisFromMessages(messages) {
         anchorElement: msg.element,
         parentId: null,
         depth: 0,
-        marked: false
+        marked: false,
+        markColor: null,
+        colorTag: null
       });
 
       if (!isUser) {
@@ -79,8 +86,10 @@ export function buildPoisFromMessages(messages) {
           hIndex += 1;
           const level = h.tagName.toLowerCase();
           const id = `${baseId}_${level}_${hIndex}`;
-          const title = shortText(h.textContent || "", 100) || "Heading";
-          const depth = level === "h1" ? 1 : level === "h2" ? 2 : 3;
+          const title =
+            shortText(h.textContent || "", 100) || "Heading";
+          const depth =
+            level === "h1" ? 1 : level === "h2" ? 2 : 3;
 
           result.push({
             id,
@@ -89,7 +98,9 @@ export function buildPoisFromMessages(messages) {
             anchorElement: h,
             parentId: baseId,
             depth,
-            marked: false
+            marked: false,
+            markColor: null,
+            colorTag: null
           });
         });
 
@@ -112,7 +123,9 @@ export function buildPoisFromMessages(messages) {
             anchorElement: pre,
             parentId: baseId,
             depth: 1,
-            marked: false
+            marked: false,
+            markColor: null,
+            colorTag: null
           });
         });
 
@@ -128,7 +141,9 @@ export function buildPoisFromMessages(messages) {
           const headerRow = tbl.querySelector("thead tr, tr");
           if (headerRow) {
             const firstHeaderCell = headerRow.querySelector("th, td");
-            const headerText = firstHeaderCell ? firstHeaderCell.textContent || "" : "";
+            const headerText = firstHeaderCell
+              ? firstHeaderCell.textContent || ""
+              : "";
             const compact = shortText(headerText, 80);
             if (compact) {
               title = `Table: ${compact}`;
@@ -142,35 +157,15 @@ export function buildPoisFromMessages(messages) {
             anchorElement: tbl,
             parentId: baseId,
             depth: 1,
-            marked: false
+            marked: false,
+            markColor: null,
+            colorTag: null
           });
         });
       }
     }
 
-    // 🔀 POIs nach tatsächlicher DOM-Position sortieren
-    try {
-      result.sort((a, b) => {
-        const elA = a.anchorElement;
-        const elB = b.anchorElement;
-
-        if (!elA || !elB || elA === elB) return 0;
-
-        const pos = elA.compareDocumentPosition(elB);
-
-        // A kommt vor B im Dokument
-        if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-        // A kommt nach B im Dokument
-        if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-
-        return 0;
-      });
-      span.end({ poiCount: result.length, sorted: true });
-    } catch (sortErr) {
-      span.error(sortErr);
-      span.end({ poiCount: result.length, sorted: false });
-    }
-
+    span.end({ poiCount: result.length });
     return result;
   } catch (err) {
     span.error(err);

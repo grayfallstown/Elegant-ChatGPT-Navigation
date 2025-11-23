@@ -1,33 +1,40 @@
 // src/content.js
-// 🚀 Consolidated v9 entry point with all features unified
+// 🚀 Konsolidierter Entry-Point – fokussiert auf POIs, Panel, Scroll & Observer
 
 import { createLogger } from "./logging.js";
-import { extractMessages, findScrollContainer, findChatRoot, scrollElementIntoView } from "./domAdapter.js";
+import {
+  extractMessages,
+  findScrollContainer,
+  findChatRoot,
+  scrollElementIntoView
+} from "./domAdapter.js";
 import { buildPoisFromMessages } from "./model.js";
 import { setPois, setActivePoiId, getStateSnapshot } from "./state.js";
 import { mountPanel } from "./panel.js";
-import { setupIntersectionObserver, setupMutationObserver, setupResizeObserver, disposeAllObservers } from "./observers.js";
+import {
+  setupIntersectionObserver,
+  setupMutationObserver,
+  setupResizeObserver,
+  disposeAllObservers
+} from "./observers.js";
 import { setupKeyboardShortcuts } from "./keyboard.js";
 
 const log = createLogger("content");
 
-let rebuildScheduled = false;
 let rebuildTimeoutId = null;
 let cleanupIntersection = null;
 let cleanupMutation = null;
 let cleanupResize = null;
 let cleanupKeyboard = null;
 let scrollContainerRef = null;
-let lastActiveMessageEl = null;
-let lastActiveChildEl = null;
 
 /**
- * Debounced rebuild trigger with improved error handling
+ * Debounced Rebuild-Trigger
  */
 function scheduleRebuild(reason = "mutation") {
   log.debug("scheduleRebuild", { reason });
   if (rebuildTimeoutId !== null) {
-    clearTimeout(rebuildTimeoutId);
+    window.clearTimeout(rebuildTimeoutId);
     rebuildTimeoutId = null;
   }
   rebuildTimeoutId = window.setTimeout(() => {
@@ -37,7 +44,7 @@ function scheduleRebuild(reason = "mutation") {
 }
 
 /**
- * Perform a full rebuild of the POI model and observers with consolidation
+ * Voller Rebuild der POI-Struktur + Observer
  */
 function performRebuild(reason = "manual") {
   const span = log.startSpan("performRebuild", { reason });
@@ -63,7 +70,7 @@ function performRebuild(reason = "manual") {
     const pois = buildPoisFromMessages(messages);
     setPois(pois);
 
-    // Cleanup existing observers
+    // Alte Observer abbauen
     if (cleanupIntersection) {
       cleanupIntersection();
       cleanupIntersection = null;
@@ -73,7 +80,7 @@ function performRebuild(reason = "manual") {
       cleanupResize = null;
     }
 
-    // Setup new observers with consolidated approach
+    // Neue Observer aufsetzen
     cleanupIntersection = setupIntersectionObserver(scrollContainer, pois);
     cleanupResize = setupResizeObserver(scrollContainer, () => {
       const { pois: latestPois } = getStateSnapshot();
@@ -90,69 +97,7 @@ function performRebuild(reason = "manual") {
 }
 
 /**
- * Highlight active message in the chat DOM with consolidated highlighting
- */
-function updateActiveMessageHighlight() {
-  const { activePoiId, pois } = getStateSnapshot();
-  const span = log.startSpan("updateActiveMessageHighlight", { activePoiId });
-
-  try {
-    // Clear previous highlights
-    if (lastActiveChildEl && lastActiveChildEl.isConnected) {
-      lastActiveChildEl.classList.remove("ecgptn-active-child");
-      lastActiveChildEl = null;
-    }
-
-    if (lastActiveMessageEl && lastActiveMessageEl.isConnected) {
-      lastActiveMessageEl.classList.remove("ecgptn-active-message");
-      lastActiveMessageEl = null;
-    }
-
-    if (!activePoiId) {
-      span.end({ ok: true, cleared: true });
-      return;
-    }
-
-    const poi = pois.find((p) => p.id === activePoiId);
-    if (!poi || !poi.anchorElement) {
-      span.end({ ok: false, reason: "poi-or-anchor-missing" });
-      return;
-    }
-
-    // Find message root for highlighting
-    let messageRoot = poi.anchorElement;
-    while (messageRoot && messageRoot !== document.body) {
-      if (messageRoot.hasAttribute("data-message-author-role")) {
-        break;
-      }
-      messageRoot = messageRoot.parentElement;
-    }
-
-    if (!messageRoot || !messageRoot.hasAttribute("data-message-author-role")) {
-      span.end({ ok: false, reason: "no-message-root-found" });
-      return;
-    }
-
-    messageRoot.classList.add("ecgptn-active-message");
-    lastActiveMessageEl = messageRoot;
-
-    // Highlight child elements for specific POI types
-    if (poi.kind === "heading" || poi.kind === "code" || poi.kind === "table") {
-      const anchor = poi.anchorElement;
-      if (anchor && document.body.contains(anchor)) {
-        anchor.classList.add("ecgptn-active-child");
-        lastActiveChildEl = anchor;
-      }
-    }
-
-    span.end({ ok: true });
-  } catch (err) {
-    span.error(err);
-  }
-}
-
-/**
- * Scroll to a given POI by id with consolidated scrolling
+ * Scrollt zu einem POI
  */
 function scrollToPoi(poiId) {
   const { pois } = getStateSnapshot();
@@ -181,7 +126,7 @@ function scrollToPoi(poiId) {
 }
 
 /**
- * Bootstraps the extension with consolidated initialization
+ * Bootstrap der Extension
  */
 function init() {
   if (globalThis.__ECGPTN_BOOTED__) {
@@ -196,51 +141,40 @@ function init() {
     const chatRoot = findChatRoot(document);
     scrollContainerRef = findScrollContainer(document);
 
+    // Panel mounten
     mountPanel((poiId) => {
       scrollToPoi(poiId);
     });
 
+    // Erstes POI-Build
     performRebuild("init");
 
+    // MutationObserver → Rebuild
     cleanupMutation = setupMutationObserver(chatRoot, () => {
       scheduleRebuild("mutation");
     });
 
+    // Keyboard-Shortcuts (next/prev, toggle usw.)
     cleanupKeyboard = setupKeyboardShortcuts((poiId) => {
       scrollToPoi(poiId);
     });
 
-    // Subscribe to state changes for highlighting
-    const unsubscribe = (() => {
-      let lastActive = null;
-      return (state) => {
-        if (state.activePoiId !== lastActive) {
-          lastActive = state.activePoiId;
-          updateActiveMessageHighlight();
-        }
-      };
-    })();
-
-    // Poll for highlight updates (consolidated approach)
-    const poller = window.setInterval(() => {
-      updateActiveMessageHighlight();
-    }, 250);
-
     span.end({ ok: true });
 
-    // Store cleanup function
+    // Cleanup-Hook (falls man im DevMode neu lädt)
     globalThis.__ECGPTN_CLEANUP__ = () => {
       disposeAllObservers();
       if (cleanupKeyboard) cleanupKeyboard();
-      window.clearInterval(poller);
-      unsubscribe(getStateSnapshot());
+      if (cleanupMutation) cleanupMutation();
+      if (cleanupIntersection) cleanupIntersection();
+      if (cleanupResize) cleanupResize();
     };
   } catch (err) {
     span.error(err);
   }
 }
 
-// Initialize when DOM is ready
+// Init, sobald DOM bereit
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
     init();

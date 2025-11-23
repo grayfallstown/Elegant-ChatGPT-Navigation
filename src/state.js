@@ -9,6 +9,7 @@ const log = createLogger("state");
 const PANEL_COLLAPSED_STORAGE_KEY = "ECGPTN_panelCollapsed_v1";
 const POI_MARKS_STORAGE_PREFIX = "ECGPTN_marks_v1::";
 const SHOW_ONLY_MARKED_STORAGE_KEY = "ECGPTN_showOnlyMarked_v1";
+const COLOR_TAGS_STORAGE_PREFIX = "ECGPTN_colorTags_v1::";
 
 /**
  * Global in-memory state with consolidated structure
@@ -55,7 +56,7 @@ export function subscribeState(fn) {
 }
 
 /**
- * Replace the current POI list with mark preservation
+ * Replace the current POI list with mark & color preservation
  * @param {Array<any>} nextPois
  */
 export function setPois(nextPois) {
@@ -64,33 +65,52 @@ export function setPois(nextPois) {
   try {
     // Preserve marks from current state
     /** @type {Set<string>} */
-    const fromState = new Set();
+    const fromStateMarks = new Set();
+    /** @type {Map<string,string>} */
+    const fromStateColors = new Map();
+
     for (const p of state.pois) {
-      if (p && p.id && p.marked) {
-        fromState.add(String(p.id));
+      if (!p || p.id == null) continue;
+      const id = String(p.id);
+      if (p.marked) {
+        fromStateMarks.add(id);
+      }
+      if (p.colorTag) {
+        fromStateColors.set(id, String(p.colorTag));
       }
     }
 
-    // Load marks from storage
-    const fromStorage = loadMarksForCurrentChat();
-    const mergedIds = new Set([...fromStorage, ...fromState]);
+    // Load marks & colors from storage
+    const marksFromStorage = loadMarksForCurrentChat();
+    const colorsFromStorage = loadColorTagsForCurrentChat();
 
-    // Apply marks to new POI list
+    const mergedMarkedIds = new Set([...marksFromStorage, ...fromStateMarks]);
+    const mergedColors = new Map([...colorsFromStorage, ...fromStateColors]);
+
+    // Apply marks & colors to new POI list
     const safeNext = Array.isArray(nextPois) ? nextPois : [];
     state.pois = safeNext.map((p) => {
       const id = p && p.id != null ? String(p.id) : "";
       if (!id) return p;
-      if (mergedIds.has(id)) {
-        return { ...p, marked: true };
-      }
-      // Ensure we don't leak stale `marked` props
-      if (p && Object.prototype.hasOwnProperty.call(p, "marked") && p.marked) {
-        return { ...p, marked: false };
-      }
-      return p;
+
+      const marked = mergedMarkedIds.has(id);
+      const colorTag = mergedColors.get(id) || null;
+
+      const base = { ...p };
+
+      // Ensure both props exist and are clean
+      base.marked = !!marked;
+      base.colorTag = colorTag;
+
+      return base;
     });
 
-    span.end({ ok: true, pois: state.pois.length, markedCount: mergedIds.size });
+    span.end({
+      ok: true,
+      pois: state.pois.length,
+      markedCount: mergedMarkedIds.size,
+      colorTaggedCount: Array.from(mergedColors.values()).filter(Boolean).length
+    });
     notify();
   } catch (err) {
     span.error(err);
@@ -157,6 +177,43 @@ export function togglePoiMarked(id) {
     }
 
     persistMarksForCurrentChat(state.pois);
+    notify();
+    span.end({ ok: true });
+  } catch (err) {
+    span.error(err);
+  }
+}
+
+/**
+ * Set or clear a colorTag for a given POI
+ * @param {string} id
+ * @param {string|null} colorTag
+ */
+export function setPoiColorTag(id, colorTag) {
+  const span = log.startSpan("setPoiColorTag", { id, colorTag });
+
+  try {
+    if (!id) {
+      span.end({ ok: false, reason: "empty-id" });
+      return;
+    }
+
+    let updated = false;
+
+    state.pois = state.pois.map((p) => {
+      if (!p || p.id == null) return p;
+      if (String(p.id) !== String(id)) return p;
+
+      updated = true;
+      return { ...p, colorTag: colorTag || null };
+    });
+
+    if (!updated) {
+      span.end({ ok: false, reason: "poi-not-found" });
+      return;
+    }
+
+    persistColorTagsForCurrentChat(state.pois);
     notify();
     span.end({ ok: true });
   } catch (err) {
@@ -259,5 +316,45 @@ function persistMarksForCurrentChat(pois) {
     log.debug("persisted poi marks", { key, count: markedIds.length });
   } catch (err) {
     log.warn("failed to persist poi marks", { key, error: String(err) });
+  }
+}
+
+function getColorTagsStorageKey() {
+  const href = typeof window !== "undefined" && window.location ? window.location.href : "unknown";
+  return `${COLOR_TAGS_STORAGE_PREFIX}${href}`;
+}
+
+function loadColorTagsForCurrentChat() {
+  const key = getColorTagsStorageKey();
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return new Map();
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return new Map();
+    const map = new Map();
+    for (const item of parsed) {
+      if (!item || typeof item.id !== "string" || typeof item.colorTag !== "string") continue;
+      map.set(item.id, item.colorTag);
+    }
+    log.debug("loaded color tags from storage", { key, count: map.size });
+    return map;
+  } catch (err) {
+    log.warn("failed to load color tags from storage", { key, error: String(err) });
+    return new Map();
+  }
+}
+
+function persistColorTagsForCurrentChat(pois) {
+  const key = getColorTagsStorageKey();
+  try {
+    const items = [];
+    for (const p of pois) {
+      if (!p || p.id == null || !p.colorTag) continue;
+      items.push({ id: String(p.id), colorTag: String(p.colorTag) });
+    }
+    window.localStorage.setItem(key, JSON.stringify(items));
+    log.debug("persisted color tags", { key, count: items.length });
+  } catch (err) {
+    log.warn("failed to persist color tags", { key, error: String(err) });
   }
 }
