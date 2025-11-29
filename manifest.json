@@ -1,9 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Elegant ChatGPT Navigation",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Consolidated navigation panel with all features unified",
   "permissions": [],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "elegant_chatgpt_navigation@grayfallstown.de"
+    }
+  },
   "host_permissions": [
     "https://chatgpt.com/*"
   ],
@@ -15,6 +20,6 @@
     }
   ],
   "icons": {
-    "128": "icons/logo.png"
+    "128": "icon/logo.png"
   }
 }

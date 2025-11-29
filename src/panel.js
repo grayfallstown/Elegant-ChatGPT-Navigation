@@ -137,6 +137,13 @@ function renderPanelContent(state) {
   container.className = "ecgptn-container";
   if (panelCollapsed) {
     container.classList.add("ecgptn-collapsed");
+
+    // 👉 Wenn eingeklappt: kompletter schmaler Streifen klickbar zum Wieder-Aufklappen
+    container.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      togglePanelCollapsed();
+    });
   }
 
   const header = document.createElement("div");
@@ -362,6 +369,18 @@ function ensureHost() {
 
       .ecgptn-container.ecgptn-collapsed {
         width: ${PANEL_COLLAPSED_WIDTH}px;
+      }
+
+      /* Im eingeklappten Zustand nur die Kopfzeile mit dem Toggle anzeigen */
+      .ecgptn-container.ecgptn-collapsed .ecgptn-title,
+      .ecgptn-container.ecgptn-collapsed .ecgptn-filter-marked,
+      .ecgptn-container.ecgptn-collapsed .ecgptn-list {
+        display: none;
+      }
+
+      .ecgptn-container.ecgptn-collapsed .ecgptn-toggle {
+        width: 100%;
+        justify-content: center;
       }
 
       .ecgptn-header {
