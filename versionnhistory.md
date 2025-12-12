@@ -1,1 +1,3 @@
 2.0.2 fix: make collapsed navigator panel fully re-expandable 😤💪
+
+2.0.3 various scroll issues fixed
