@@ -29,6 +29,79 @@ let cleanupKeyboard = null;
 let scrollContainerRef = null;
 
 /**
+ * Merkt sich Scroll-Position + Verhältnis (für robuste Restore-Logik)
+ */
+function captureScrollState(scrollContainer) {
+  try {
+    if (!scrollContainer) return null;
+
+    const scrollTop = scrollContainer.scrollTop || 0;
+    const maxScrollTop = Math.max(0, (scrollContainer.scrollHeight || 0) - (scrollContainer.clientHeight || 0));
+    const ratio = maxScrollTop > 0 ? scrollTop / maxScrollTop : 0;
+
+    return {
+      scrollTop,
+      ratio,
+      scrollHeight: scrollContainer.scrollHeight || 0,
+      clientHeight: scrollContainer.clientHeight || 0
+    };
+  } catch (err) {
+    log.warn("captureScrollState failed", { error: String(err) });
+    return null;
+  }
+}
+
+/**
+ * Stellt Scroll-Position wieder her (erst direkt, dann nochmal im nächsten Frame)
+ * → doppelt, weil DOM/Observer manchmal nachträglich Layout/Scroll beeinflussen
+ */
+function restoreScrollState(scrollContainer, state) {
+  try {
+    if (!scrollContainer || !state) return;
+
+    const maxScrollTop = Math.max(0, (scrollContainer.scrollHeight || 0) - (scrollContainer.clientHeight || 0));
+    const targetTop = Number.isFinite(state.scrollTop) ? state.scrollTop : 0;
+
+    // Wenn sich die Höhe stark geändert hat: prozentual restaurieren
+    const heightChangedALot =
+      Math.abs((scrollContainer.scrollHeight || 0) - (state.scrollHeight || 0)) > 200;
+
+    const nextTop = heightChangedALot
+      ? Math.round(maxScrollTop * (state.ratio || 0))
+      : Math.min(maxScrollTop, Math.max(0, targetTop));
+
+    scrollContainer.scrollTop = nextTop;
+
+    // Safety: nochmal im nächsten Paint (und nochmal im rAF danach)
+    window.requestAnimationFrame(() => {
+      try {
+        const max2 = Math.max(0, (scrollContainer.scrollHeight || 0) - (scrollContainer.clientHeight || 0));
+        const top2 = heightChangedALot
+          ? Math.round(max2 * (state.ratio || 0))
+          : Math.min(max2, Math.max(0, targetTop));
+        scrollContainer.scrollTop = top2;
+
+        window.requestAnimationFrame(() => {
+          try {
+            const max3 = Math.max(0, (scrollContainer.scrollHeight || 0) - (scrollContainer.clientHeight || 0));
+            const top3 = heightChangedALot
+              ? Math.round(max3 * (state.ratio || 0))
+              : Math.min(max3, Math.max(0, targetTop));
+            scrollContainer.scrollTop = top3;
+          } catch {
+            // nope
+          }
+        });
+      } catch {
+        // nope
+      }
+    });
+  } catch (err) {
+    log.warn("restoreScrollState failed", { error: String(err) });
+  }
+}
+
+/**
  * Debounced Rebuild-Trigger
  */
 function scheduleRebuild(reason = "mutation") {
@@ -67,6 +140,9 @@ function performRebuild(reason = "manual") {
       return;
     }
 
+    // 💥 FIX: Scroll-Position vor Rebuild merken
+    const scrollStateBefore = captureScrollState(scrollContainer);
+
     const pois = buildPoisFromMessages(messages);
     setPois(pois);
 
@@ -89,6 +165,9 @@ function performRebuild(reason = "manual") {
       }
       cleanupIntersection = setupIntersectionObserver(scrollContainer, latestPois);
     });
+
+    // 💥 FIX: Scroll-Position nach Rebuild wiederherstellen
+    restoreScrollState(scrollContainer, scrollStateBefore);
 
     span.end({ ok: true, poiCount: pois.length });
   } catch (err) {

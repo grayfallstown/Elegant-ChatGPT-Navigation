@@ -1,6 +1,6 @@
 {
   "name": "elegant-chatgpt-navigation",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "private": true,
   "description": "Navigate through long ChatGPT chats effortlessly",
   "scripts": {

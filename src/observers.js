@@ -2,7 +2,7 @@
 // 👀 Konsolidierte Observer: IntersectionObserver, MutationObserver, ResizeObserver
 
 import { createLogger } from "./logging.js";
-import { setActivePoiId } from "./state.js";
+import { getStateSnapshot, setActivePoiId } from "./state.js";
 
 const log = createLogger("observers");
 
@@ -26,6 +26,13 @@ export function setupIntersectionObserver(scrollContainer, pois) {
 
   const elementToPoiId = new Map();
   const visibility = new Map();
+
+  // 🔥 Map für Metadata (depth/parentId), damit wir “sticky child” sauber können
+  const poiById = new Map();
+  for (const p of Array.isArray(pois) ? pois : []) {
+    if (!p || !p.id) continue;
+    poiById.set(String(p.id), p);
+  }
 
   intersectionObserver = new IntersectionObserver(
     (entries) => {
@@ -57,9 +64,35 @@ export function setupIntersectionObserver(scrollContainer, pois) {
         }
       }
 
+      // 🧠 Sticky-Logic:
+      // Wenn wir zwischen Child-POIs sind, gewinnt sonst oft der Parent (response root) → Jump-to-top.
+      // Lösung: Parent darf NICHT den aktiven Child verdrängen, solange kein neuer Child sichtbar ist.
       if (bestId) {
+        const { activePoiId } = getStateSnapshot();
+
+        const bestPoi = poiById.get(String(bestId));
+        const activePoi = activePoiId ? poiById.get(String(activePoiId)) : null;
+
+        const bestDepth = bestPoi && Number.isFinite(bestPoi.depth) ? bestPoi.depth : 0;
+        const activeDepth = activePoi && Number.isFinite(activePoi.depth) ? activePoi.depth : 0;
+
+        const bestIsParent = bestDepth === 0;
+        const activeIsChild = activeDepth > 0;
+
+        const sameParent =
+          bestIsParent &&
+          activeIsChild &&
+          activePoi &&
+          String(activePoi.parentId || "") === String(bestId);
+
+        if (sameParent) {
+          // 😤💪 Halte den Child (z.B. POI4), bis POI5 wirklich sichtbar wird.
+          bestId = String(activePoiId);
+        }
+
         setActivePoiId(bestId);
       }
+      // Wenn bestId == null: nix tun → active bleibt stehen (auch gut gegen Flackern)
     },
     {
       root: scrollContainer,
@@ -87,6 +120,7 @@ export function setupIntersectionObserver(scrollContainer, pois) {
     }
   };
 }
+
 
 /**
  * Setup MutationObserver auf dem Chat-Root

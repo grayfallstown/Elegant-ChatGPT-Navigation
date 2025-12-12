@@ -313,7 +313,46 @@ function renderPanelContent(state) {
   container.appendChild(header);
   container.appendChild(list);
   wrapper.appendChild(container);
+
+  // 🔥 FIX: aktiven POI in der Navigation sichtbar halten (ohne Jump-to-Top)
+  try {
+    if (!panelCollapsed && activePoiId) {
+      const activeRow = wrapper.querySelector(
+        `.ecgptn-row[data-poi-id="${activePoiId}"]`
+      );
+
+      const listEl = wrapper.querySelector(".ecgptn-list");
+
+      if (activeRow && listEl) {
+        activeRow.scrollIntoView({
+          block: "nearest",
+          inline: "nearest",
+          behavior: "auto" // bewusst NICHT smooth → kein Zittern
+        });
+        
+        // 2️⃣ Dann bewusst weiter nach unten schieben (5–7 Zeilen)
+        const OFFSET_ROWS = 6; // 👈 hier feinjustieren (5–7 ist sweet spot)
+        const rowHeight = activeRow.offsetHeight || 20;
+
+        const extraOffset = rowHeight * OFFSET_ROWS;
+
+        // Safety: nur wenn genug Platz nach unten da ist
+        const maxScrollTop =
+          listEl.scrollHeight - listEl.clientHeight;
+
+        const targetScrollTop = Math.min(
+          maxScrollTop,
+          listEl.scrollTop + extraOffset
+        );
+
+        listEl.scrollTop = targetScrollTop;
+      }
+    }
+  } catch {
+    // bewusst still – UI-Stabilität > Logging
+  }
 }
+
 
 
 function iconForKind(kind) {
